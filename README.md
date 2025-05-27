@@ -28,7 +28,7 @@ Referensi:
 #### Deskripsi Dataset
 
 Dataset ini berisi data mengenai pasien yang memiliki atau berisiko mengalami diabetes. Setiap baris mewakili satu pasien, dan terdapat berbagai fitur medis yang diukur untuk setiap individu.
-Dataset ini mencakup **768 entri** data dengan **12 kolom** fitur. Dataset ini memiliki label kelas yang mengindikasikan status diabetes pasien, yaitu **Non-diabetic (N)**, **Prediabetic (P)**, atau **Diabetic (Y)**.
+Dataset ini mencakup **1000 entri** data dengan **14 kolom** fitur. Dataset ini memiliki label kelas yang mengindikasikan status diabetes pasien, yaitu **Non-diabetic (N)**, **Prediabetic (P)**, atau **Diabetic (Y)**.
 
 #### Sumber Dataset
 Dataset ini dapat ditemukan di [Kaggle - Diabetes Prediction Dataset](https://www.kaggle.com/datasets/marshalpatel3558/diabetes-prediction-dataset-legit-dataset/data?select=Dataset+of+Diabetes+.csv).
@@ -185,17 +185,43 @@ df['CLASS'].value_counts()
 ```
 fungsi `replace()` pada `df['CLASS'].replace({'Y ': 'Y', 'N ': 'N'})` merubah karakter 'Y ' dan 'N ' menjadi 'Y' dan 'N' agar sesuai dengan nilai utama
 
+
 ### 2. Encoding Categorical
 
 ![Encoding](img/encode_categorical.jpg)
 
 `LabelEncoder()` digunakan untuk merubah nilai kategorikal menjadi bentuk dari **0 sampai banyaknya data -1**, karena pada *Gender* memiliki 2 nilai yaitu F dan M , maka dirubah menjadi F = 0 , M = 1. Sedangkan pada *CLASS* memiliki 3 nilai yaitu Y, N, dan P maka dirubah menjadi N= 0, P= 1, Y= 2 
 
-### 3. Correlation Matrix setelah Encode
+### 3. Drop Columns
+![Drop Columns](img/drop_columns.jpg)
+
+```
+df.drop(['ID', 'No_Pation'], axis=1, inplace=True)
+
+```
+
+pada kolom `ID` dan `No_Pation` kita drop karena kolom ini tidak digunakan dalam proses modelling nanti karena tidak memiliki makna tertentu.
+
+### 4. Correlation Matrix setelah Encode
 
 ![Correlation Matrix](img/corr_metrik.png)
 
 Berdasarkan hasil **korelasi matrix** , fitur yang memiliki keterkaitan yang kuat dengan target `CLASS` yaitu `BMI`, `HbA1C`, dan `AGE` . sedangkan kolom `VLDL`, `TG`, `Chol`, dan `Gender` memiliki keterkaitan dengan target namun lemah.
+
+### 5. Train-Test Split
+
+```
+X = df.drop('CLASS', axis=1)
+y = df['CLASS']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+```
+![Train-Test Split](img/hasil_train_test_split.jpg)
+
+pada fungsi `train_test_split()` disini menerapkan **80:20** , yaitu dimana 80% digunakan sebagai data **train** dan 20% digunakan untuk data **test**. `random_state=42` digunakan agar pemisahan data dilakukan secara random dan menetapkan nilai supaya hasil split tidak berubah - ubah ketika dijalankan ulang.
+
+
 
 ### 4. SMOTE (Oversampling)
 
@@ -222,41 +248,103 @@ X_test = scaler.transform(X_test)
 ![Logistic Regression](img/lr_matrix.jpg)
 ![Logistic Regression](img/lr_confusion.png)
 
-pada model `Random Forest` hasil akurasi didapatkan mencapai **90%** dengan masing masing :
+Model pertama yang dilatih adalah **Logistic Regression** sebagai baseline. Model ini memprediksi probabilitas kelas target menggunakan **fungsi sigmoid/logistik**:
+
+$$
+P(y=1|x) = \frac{1}{1 + e^{-(wX + b)}}
+$$
+
+di mana:
+
+* $w$: bobot fitur
+* $X$: vektor fitur
+* $b$: bias/intersep
+
+**Parameter yang digunakan:**
+
+```python
+LogisticRegression(random_state=42)
+```
+* `random_state=42`: menjaga konsistensi hasil.
+
+- Kelebihan:
+
+  * Cepat dan efisien.
+  * Mudah diinterpretasikan.
+  * Cocok untuk relasi linier.
+
+- Kekurangan:
+
+  * Kurang efektif untuk pola non-linear.
+  * Sensitif terhadap multikolinearitas.
+
+pada model `Logistic Regression` hasil akurasi didapatkan mencapai **90%** dengan masing masing :
 
 - pada **class** 0 
   
-  `presisi` : 88%
+  `presisi` : 67%
 
-  `recall`  : 100%
+  `recall`  : 86%
 
-  `f1-score` : 93%
+  `f1-score` : 75%
 
 - pada **class** 1 
   
-  `presisi` : 100%
+  `presisi` : 27%
 
-  `recall`  : 100%
+  `recall`  : 67%
 
-  `f1-score` : 100%
+  `f1-score` : 38%
 
 - pada **class** 2 
   
   `presisi` : 100%
 
-  `recall`  : 98%
+  `recall`  : 67%
 
-  `f1-score` : 99%
+  `f1-score` : 38%
 
 
-Hasil ini menunjukkan bahwa model ini sudah cukup baik untuk mengenali pola dari masing-masing nilai pada target.
+Hasil ini menunjukkan bahwa model ini belum bisa mengenali pola secara merata khususnya untuk **class** bernilai 1 / Prediabetes
 
 ### 2. Random Forest
 
 ![Random Forest](img/rf_matrix.jpg)
 ![Random Forest](img/rf_confusion.png)
 
-pada model `Random Forest` hasil akurasi didapatkan mencapai **90%** dengan masing masing :
+Model ensambel berbasis pohon keputusan yang menggunakan teknik **bagging (Bootstrap Aggregating)**. Setiap decision tree dilatih dari subset acak data dan subset acak fitur, dan prediksi akhir diambil melalui **voting mayoritas** dari semua pohon.
+
+$$
+\hat{y} = \text{mode}(h_1(x), h_2(x), \dots, h_T(x))
+$$
+
+di mana:
+
+* $h_t(x)$: prediksi dari pohon ke-$t$
+* $T$: jumlah total pohon dalam hutan
+* `mode`: memilih prediksi yang paling sering muncul
+
+**Parameter yang digunakan:**
+
+```python
+RandomForestClassifier(random_state=42)
+```
+
+* `random_state=42`: menjaga replikasi hasil.
+* `n_estimators=100` digunakan sebagai default (jumlah pohon) Tidak disebutkan secara eksplisit.
+
+- Kelebihan:
+
+  * Tahan terhadap overfitting.
+  * Mampu menangani fitur yang berinteraksi dan non-linear.
+  * Memberikan feature importance.
+
+- Kekurangan:
+
+  * Interpretasi kompleks.
+  * Waktu inferensi dan konsumsi memori lebih tinggi.
+
+pada model `Random Forest` hasil akurasi didapatkan mencapai **98.5** dengan masing masing :
 
 - pada **class** 0 
   
@@ -289,4 +377,4 @@ Hasil ini menunjukkan bahwa model ini sudah cukup baik untuk mengenali pola dari
 
 ![Evaluasi](img/evaluasi.jpg)
 
-perbandingan antara `Logistic Regression` dan `Random Forest` menunjukkan bahwa `Random Forest` lebih baik tingkat akurasinya yaitu sebesar **98 %**
+perbandingan antara `Logistic Regression` dan `Random Forest` menunjukkan bahwa `Random Forest` lebih baik tingkat akurasinya yaitu sebesar **98.5 %** , diikuti dengan matrix yang lain yang lebih tinggi menandakan bahwa `Random Forest` merupakan model yang lebih baik dibanding `Logistic Regression` pada kasus ini.
