@@ -60,7 +60,7 @@ Dataset ini dapat ditemukan di [Kaggle - Diabetes Prediction Dataset](https://ww
 ## EDA (Exploratory Data Analysist)
 
 ### 1. Deskrisi Statistik
-![Deskripsi Statistik](img\describe.jpg)
+![Deskripsi Statistik](img/describe.jpg)
 
 dari fungsi `describe()` kita dapat mengetahui beberapa informasi :
 
@@ -71,7 +71,7 @@ dari fungsi `describe()` kita dapat mengetahui beberapa informasi :
 - **BMI**: Rata-rata BMI adalah 29.58, yang menunjukkan bahwa sebagian besar pasien termasuk dalam kategori overweight atau obesitas.
 
 ### 2. Boxplot Data Numerik
-![Boxplot Numerik](img\boxplot_numerik.png)
+![Boxplot Numerik](img/boxplot_numerik.png)
 
 Boxplot yang ditampilkan menunjukkan beberapa fitur dalam dataset yang memiliki outliers yang terdeteksi. Outliers ini ditunjukkan dengan titik di luar whiskers pada setiap boxplot. Berikut adalah penjelasan mengenai fitur-fitur yang memiliki outliers:
 
@@ -98,19 +98,19 @@ Kesimpulan:
 
 ### 3. Distribusi Gender
 
-![Distribusi Gender](img\distribusi_gender.png)
+![Distribusi Gender](img/distribusi_gender.png)
 
 pada kolom `gender` menunjukkan perbandingan yang hampir seimbang yaitu untuk **Male** sebanyak **565** data dan untuk **Female** sebanyak **435**. Namun terdapat kesalahan penulisan pada salah satu data yaitu menggunakan huruf kecil pada `f` yang mana ini menunjukkan inkonsistensi. Maka perlu dirubah agar data menjadi konsisten
 
 ### 4. Distribusi CLASS
 
-![Distribusi CLASS](img\distribusi_label.png)
+![Distribusi CLASS](img/distribusi_label.png)
 
 pada kolom `CLASS` menunjukkan perbandingan yang yang tidak seimbang / imbalance yaitu untuk **Y** sebanyak **844** data, untuk **N** sebanyak **103**,dan untuk **P** sebanyak **53**. Namun terdapat beberapa data yang terjadi kesalahan penulisan yaitu `Y`  dan `N` ,yang mana ini menunjukkan inkonsistensi. Maka perlu dirubah agar data menjadi konsisten
 
 ### 4. Distibusi Numerik (Histogram)
 
-![Distribusi Numerik](img\distribusi_numerik.png)
+![Distribusi Numerik](img/distribusi_numerik.png)
 
  Penjelasan Distribusi Histogram untuk Fitur Numerik
 
@@ -164,8 +164,8 @@ pada kolom `CLASS` menunjukkan perbandingan yang yang tidak seimbang / imbalance
 
 ### 1: Menangani Data Inkonsisten 
 
-![Inkonsisten Data](img\inkonsisten_data_gender.jpg)
-![Inkonsisten Data](img\inkonsisten_data_label.jpg)
+![Inkonsisten Data](img/inkonsisten_data_gender.jpg)
+![Inkonsisten Data](img/inkonsisten_data_label.jpg)
 
 
 
@@ -187,19 +187,19 @@ fungsi `replace()` pada `df['CLASS'].replace({'Y ': 'Y', 'N ': 'N'})` merubah ka
 
 ### 2. Encoding Categorical
 
-![Encoding](img\encode_categorical.jpg)
+![Encoding](img/encode_categorical.jpg)
 
 `LabelEncoder()` digunakan untuk merubah nilai kategorikal menjadi bentuk dari **0 sampai banyaknya data -1**, karena pada *Gender* memiliki 2 nilai yaitu F dan M , maka dirubah menjadi F = 0 , M = 1. Sedangkan pada *CLASS* memiliki 3 nilai yaitu Y, N, dan P maka dirubah menjadi N= 0, P= 1, Y= 2 
 
 ### 3. Correlation Matrix setelah Encode
 
-![Correlation Matrix](img\corr_metrik.png)
+![Correlation Matrix](img/corr_metrik.png)
 
 Berdasarkan hasil **korelasi matrix** , fitur yang memiliki keterkaitan yang kuat dengan target `CLASS` yaitu `BMI`, `HbA1C`, dan `AGE` . sedangkan kolom `VLDL`, `TG`, `Chol`, dan `Gender` memiliki keterkaitan dengan target namun lemah.
 
 ### 4. SMOTE (Oversampling)
 
-![SMOTE](img\smote.png)
+![SMOTE](img/smote.png)
 
 Hasil dari `SMOTE` dapat dilihat yaitu sekarang target menunjukkan sudah balance dengan masing masing memiliki nilai **671**
 
@@ -219,8 +219,8 @@ X_test = scaler.transform(X_test)
 
 ### 1. Logistic Regression
 
-![Logistic Regression](img\lr_matrix.jpg)
-![Logistic Regression](img\lr_confusion.png)
+![Logistic Regression](img/lr_matrix.jpg)
+![Logistic Regression](img/lr_confusion.png)
 
 pada model `Random Forest` hasil akurasi didapatkan mencapai **90%** dengan masing masing :
 
@@ -253,8 +253,8 @@ Hasil ini menunjukkan bahwa model ini sudah cukup baik untuk mengenali pola dari
 
 ### 2. Random Forest
 
-![Random Forest](img\rf_matrix.jpg)
-![Random Forest](img\rf_confusion.png)
+![Random Forest](img/rf_matrix.jpg)
+![Random Forest](img/rf_confusion.png)
 
 pada model `Random Forest` hasil akurasi didapatkan mencapai **90%** dengan masing masing :
 
@@ -287,6 +287,6 @@ Hasil ini menunjukkan bahwa model ini sudah cukup baik untuk mengenali pola dari
 
 ## Evaluasi
 
-![Evaluasi](img\evaluasi.jpg)
+![Evaluasi](img/evaluasi.jpg)
 
 perbandingan antara `Logistic Regression` dan `Random Forest` menunjukkan bahwa `Random Forest` lebih baik tingkat akurasinya yaitu sebesar **98 %**
