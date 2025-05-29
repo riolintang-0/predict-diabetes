@@ -377,4 +377,21 @@ Hasil ini menunjukkan bahwa model ini sudah cukup baik untuk mengenali pola dari
 
 ![Evaluasi](img/evaluasi.jpg)
 
+Hasil Evaluasi ini menggunakan matrix `Accuracy` , `Precision` , `Recall` , dan `F1-Score`
+1. **Accuracy**: Mengukur proporsi prediksi yang benar dibandingkan total prediksi.
+
+   $Accuracy = rac{TP + TN}{TP + TN + FP + FN}$
+
+2. **Precision**: Proporsi prediksi positif yang benar dari seluruh prediksi positif.
+
+   $Precision = rac{TP}{TP + FP}$
+
+3. **Recall**: Proporsi positif yang berhasil diprediksi dengan benar.
+
+   $Recall = rac{TP}{TP + FN}$
+
+4. **F1-Score**: Harmonik dari precision dan recall.
+
+   $F1 = 2 * rac{Precision * Recall}{Precision + Recall}$
+
 perbandingan antara `Logistic Regression` dan `Random Forest` menunjukkan bahwa `Random Forest` lebih baik tingkat akurasinya yaitu sebesar **98.5 %** , diikuti dengan matrix yang lain yang lebih tinggi menandakan bahwa `Random Forest` merupakan model yang lebih baik dibanding `Logistic Regression` pada kasus ini.
